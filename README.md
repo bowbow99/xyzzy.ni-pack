@@ -1,78 +1,79 @@
 # ni-pack for xyzzy
 
-����͉�
+これは何
 --------
-xyzzy�̊g��Lisp��Git���|�W�g������NetInstaller�����ɔz�z�ł���悤�ɂ����B
+xyzzyの拡張LispのGitリポジトリからNetInstaller向けに配布できるようにするやつ。
 
 
-�ˑ����郉�C�u����
-------------------
+依存するライブラリなど
+----------------------
 - [ansify](https://github.com/bowbow99/xyzzy.ansify)
+- [NetInstaller](http://www7a.biglobe.ne.jp/~hat/xyzzy/ni.html)
 
-���̑��ɕK�v�Ȃ���
+その他に必要なもの
 ------------------
 - Git for Windows
 
 
-�C���X�g�[��
+インストール
 ------------
-TODO: �z�z�ł���悤�ɂ����珑��
+TODO: 配布できるようにしたら書く
 
 
-�����Ɛݒ�
+準備と設定
 ----------
-���[�J���Ɉȉ��̂��̂�p�ӂ���K�v������܂��B
+ローカルに以下のものを用意する必要があります。
 
-- ���[�J���T�C�g
-  - SITE-DIR: �z�z����u���f�B���N�g��
-  - SITE-FILE: �z�z�����X�g�t�@�C���i`packages.l`�j
-- �g���� Git ���|�W�g��
-  - ���|�W�g���̃��[�g���炻�̂܂� zip �Ōł߂���悤�ɔz�u����
-  - ���[�g�� `README.md`
-    - ���̑��̃t�@�C�����܂߂āA���[�g�����ɂ���t�@�C���� `site-lisp/<�g����>/` �Ɉړ������
-  - lisp �t�@�C���� `./site-lisp/` �ȉ��ɒu��
-  - MAIN-SOURCE: ���C���� lisp �t�@�C�� `./site-lisp/<�g����>.l`
-    - TODO: �w�b�_�̏�����
+- ローカルサイト
+  - SITE-DIR: 配布物を置くディレクトリ
+  - SITE-FILE: 配布物リストファイル（`packages.l`）
+- 拡張の Git リポジトリ
+  - リポジトリのルートからそのまま zip で固められるように配置する
+  - ルートに `README.md`
+    - その他のファイルも含めて、ルート直下にあるファイルは `site-lisp/<拡張名>/` に移動される
+  - lisp ファイルは `./site-lisp/` 以下に置く
+  - MAIN-SOURCE: メインの lisp ファイル `./site-lisp/<拡張名>.l`
+    - TODO: ヘッダの書き方
 
-`SITE-FILE` �͖������ `ni-pack::create-local-site` �ō쐬���邱�Ƃ��ł��܂��B
+`SITE-FILE` は無ければ `ni-pack::create-local-site` で作成することもできます。
 
 
-��L���p�ӏo������A`.xyzzy` �Ȃǂ�
+上記が用意出来たら、`.xyzzy` などで
 
     (require "ni-pack")
     (setf ni-pack:*local-site-directory* "~/path/to/SITE-DIR")
 
-���ɐݒ�ł��鍀�ڂ͈ȉ��̂��̂�����܂��B
+他に設定できる項目は以下のものがあります。
 
 - `ni-pack:*local-site-file*`
-  - �ݒ肵�Ȃ���� `<SITE-DIR>/packages.l` �ɂȂ�܂��B
-  - ����ȊO�̃t�@�C�����g�p����ꍇ�́A���̃t�@�C���̃p�X��ݒ肵�Ă��������B
+  - 設定しなければ `<SITE-DIR>/packages.l` になります。
+  - それ以外のファイルを使用する場合は、そのファイルのパスを設定してください。
 - `ni-pack:*site-base-url*`
-  - �z�z����u���f�B���N�g����URL�ł��B�e�z�z�����_�E�����[�h����URL�Ɏg�p����܂��B
-  - �ݒ肵�Ȃ���΃T�C�g�� URL ���g�p����܂��B
-  - ����ȊO�̏ꏊ�ɔz�z����u���ꍇ�́A���� URL ���w�肵�܂��B
+  - 配布物を置くディレクトリのURLです。各配布物をダウンロードするURLに使用されます。
+  - 設定しなければサイトの URL が使用されます。
+  - それ以外の場所に配布物を置く場合は、その URL を指定します。
 - `ni-pack:*temp-directory*`
-  - �z�z�����쐬����ۂɎd�l����ꎞ�f�B���N�g���ł��B
-  - �w�肵�Ȃ���΁A���ϐ� `TMP` ���g�p����܂��B
+  - 配布物を作成する際に仕様する一時ディレクトリです。
+  - 指定しなければ、環境変数 `TMP` が使用されます。
 
 
-�g����
+使い方
 ------
 
-1. �g�������
-  - Git�ŊǗ����Ă�������
-  - �����[�X�ł����Ԃɂ��Ă�������
+1. 拡張を作る
+  - Gitで管理してください
+  - リリースできる状態にしてください
 2. `M-x ni-pack:release`
-  - �t�@�C�����𕷂����̂ŁA<MAIN-SOURCE> ���w�肵�܂��B
-  - �������茾���ƈȉ��̂悤�ɏ�������܂�
-    - ���|�W�g�����ꎞ�f�B���N�g���ɃN���[������ `.git` �����폜
-    - ���[�g�����ɂ���t�@�C���� `site-lisp/<�g����>/` �ֈړ�
-    - lisp�t�@�C����S�ăR���p�C��
-    - zip �Ōł߂� `<SITE-DIR>/<�g����>-<�o�[�W����>.zip` ���쐬
-    - <SITE-FILE> ���X�V
-3. ���J�ꏊ�փA�b�v���[�h���Ă�������
+  - ファイル名を聞かれるので、<MAIN-SOURCE> を指定します。
+  - ざっくり言うと以下のように処理されます
+    - リポジトリを一時ディレクトリにクローンして `.git` 等を削除
+    - ルート直下にあるファイルを `site-lisp/<拡張名>/` へ移動
+    - lispファイルを全てコンパイル
+    - zip で固めて `<SITE-DIR>/<拡張名>-<バージョン>.zip` を作成
+    - <SITE-FILE> を更新
+3. 公開場所へアップロードしてください
 
 
-���C�Z���X
+ライセンス
 ----------
 [MIT](COPYING.mit)
